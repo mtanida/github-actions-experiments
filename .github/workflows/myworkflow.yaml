@@ -1,0 +1,14 @@
+name: "Testing PR events"
+on:
+  pull_request:
+jobs:
+  test-pr:
+    runs-on: ubuntu-latest
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+      with:
+        lfs: true
+    - name: Cat file
+      run: |
+        cat myfile.txt
