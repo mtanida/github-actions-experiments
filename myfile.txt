@@ -1,1 +1,6 @@
 MYFILE!
+hello
+there
+a
+b
+c
