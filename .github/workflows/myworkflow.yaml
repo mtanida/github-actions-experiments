@@ -12,3 +12,4 @@ jobs:
     - name: Cat file
       run: |
         cat myfile.txt
+        cat secondfile.txt
