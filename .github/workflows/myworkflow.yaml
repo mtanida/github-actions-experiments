@@ -1,5 +1,10 @@
 name: "Testing PR events"
 on:
+  workflow_dispatch:
+    inputs:
+      debug:
+        type: boolean
+        default: false
   pull_request:
 jobs:
   test-pr:
@@ -13,3 +18,21 @@ jobs:
       run: |
         cat myfile.txt
         cat secondfile.txt
+    - name: Get Branch Name
+      run: |
+        if [[ "${GITHUB_EVENT_NAME}" == "pull_request" ]]; then
+          BRANCH_NAME="${GITHUB_HEAD_REF}"
+          echo "PR source branch: ${BRANCH_NAME}"
+        else
+          BRANCH_NAME="${GITHUB_REF#refs/heads/}"
+          echo "Push triggered on: ${BRANCH_NAME}"
+        fi
+        BRANCH_SLUG="${BRANCH_NAME//\//_}"
+        echo "BRANCH_NAME=${BRANCH_NAME}" >> $GITHUB_ENV
+        echo "COMMIT_SHA=$(git rev-parse --short HEAD)" >> $GITHUB_ENV
+        echo "BRANCH_SLUG=${BRANCH_SLUG}" >> $GITHUB_ENV
+        echo "CACHE_TAG=${BRANCH_SLUG}-cache" >> $GITHUB_ENV
+    - name: Print Branch Name
+      run: |
+        echo "Branch name is : ${BRANCH_NAME}"
+
